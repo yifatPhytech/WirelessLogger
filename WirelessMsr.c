@@ -98,6 +98,8 @@ BYTE GetSensorType()
 void Initialization()
 {
     char i;
+    iLastMsr[0] = MeasureCharger();
+    MsrStatus[0] = MSR_DONE;
 //    #ifdef DebugMode
 //    mainTask = TASK_MONITOR;
 //    SendDebugMsg("\r\nInit \0");
@@ -789,7 +791,7 @@ void SaveAllData()
 //        SendDebugMsg("\r\nsave All 2\0");
 //        #endif DebugMode
 
-    for (objToMsr = SENSOR1; objToMsr <= eNumSensors; objToMsr++)
+    for (objToMsr = 0/*SENSOR1*/; objToMsr <= eNumSensors; objToMsr++)
     {
        if ((MsrStatus[objToMsr] == MSR_NEEDED) && (iLastMsr[objToMsr] != MinInt))
         {

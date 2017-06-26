@@ -335,6 +335,11 @@ struct WirelessSensor
 #define MAX_WL_SEN_NUM     101//48
 #define MAX_SEN_NUM     MAX_WL_SEN_NUM
 
+#define MUX_CHARGE  0
+#define MUX_BATTERY 1
+#define H_PROG      988
+#define R_PROG      3010
+
 #define SENSOR_DATA_ID      10
 #define SENSOR_LOCATION_ID  11
 #define SENSOR_GPS_ID       12
@@ -663,6 +668,8 @@ BYTE SetModemBaudRate();
 void StlModemMain();
 
 void MeasureBatt();
+
+unsigned int MeasureCharger(void);
 
 void ConvertEpoch2SysTime(date_time_t* local_date_time, unsigned long epoch_counter);
 
