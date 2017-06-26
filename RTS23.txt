@@ -1,0 +1,83 @@
+08.06.2016  1. watchdog reset io - PORTC7 - set to 0 0 (input tri state)
+            2. direction of PORTB4 set to 0
+            3. direction of PORTB2 set to 0
+13/06/2016  1. check battery every minute. if its under 3400 disable wireless and do not connect. only when its more than 3600 -  redo everything.
+            2. if CREG return 3 - denide - half or more times in a row - stop the registration of this operator
+15/06/2016  treat battery as sensor 0.
+19/06/2016  change IO's on PowerDownSleep to reuven's IO's, cos of high-flow intake during sleep.
+28/03/2017  replace the var "heat_time" name to "nTimeCnt"
+            insert check of GPS. file name is GPS_Manager.c
+30/04/2017  1. if sim is JTC like movistar - look for list of operators.
+            2. GPS_Manager - a. checl length of uartRxCnt before copy UAR1 buffer to local buffer
+            b. set MINMEA_MAX_LENGTH to 200.
+            c. put the while condition to index + 5
+2017:
+            Data manager:
+            1.    lat & lon – order of sending
+            2.    read of  sensor control parameters from eeprom
+            3.    delete func InitSensorBlocks
+
+            General:
+            1.    delete tagSwitched
+            2.    insert new func SetUART1BaudRate
+            3.    baudrate of uart1
+            4.    ADC initialization
+            5.    change timer1 configuration
+            6.    after InitRTC add SetRtc24Hour
+            7.    check for battery status and act according to it
+            8.    after reset starts with monitor (not masure)
+            9.    IsLedWorking – checks if all 3 leds are working
+            10.    turn off watchdog in the beginning of PowerDownSleep
+            11.    wait 30 sec in case all 3 leds are working
+            12.	PowerDownSleep – IO changes
+            13.	TurnOnLed – only on external reset and no leds on failure
+            14.	delete pin-change interrupt
+            15.	InitProgram – add init for leds and for battery status
+            16.	add function UART1Select
+            17.	SendDebugMsg – working with wireless
+
+            Gps Manager:
+            1.	add module
+
+            Interrupts:
+            1.	putchar1 – select uart1 first
+            2.	timer0_ovf_isr – when end of rx -print rx buffer of uart0
+            3.	timer2_ovf_isr – enlarge the gap of waiting till end of input.
+            4.	timer2_ovf_isr – end of GPS when reach to max buffer
+            5.	flgUart1Error – add
+            6.	delete pin change interrupt
+            7.	TransmitBuf – remove "while (bWaitForMonitorCmd == TRUE);" //wait until rx1 end.
+
+            RTC managet
+            1.	SetRealTime – return success only after check if need SetRtc24Hour
+
+            Modem Manager:
+            1.	SendATCmd – if modem model is 4D – should change a digit in few AT commands
+            2.	Is4dModem – check model of modem
+            3.	Leds
+            4.	config baudrate
+
+            Wireless manager:
+            1.	init "index" field of WLSenArr
+            2.	fGotData – flag to sign some data arrived from receiver
+            3.	nBadAnswer – flag to sign that got data but bad
+            4.	 nDataok – flag to sign that got data and it ok
+            5.	nCycles – flag to count number of times reading from receiver performed this time
+            6.	clear RxUart1Buf and rx1_buff_len before every reading
+            7.	check if no data msg arrived
+            8.	look for header. Not assume that it first byte
+
+
+VERSION: W.5.17.5
+16/05/2017  1.set modemOnStartUp to FALSE when init
+VERSION: W.5.17.6
+21/05/2017  1. Led1 star blink while look 4 GPS. when finished - is on continuous.
+            2. Add DeepSleep function and powerOnReset flag. if reset source is Power on - do not start normal run but go to deep sleep till
+            reset button is pressed.
+1-22/06/2017    1. batery limmit - if battery going down one of the limits (modem connecting or wireless) - only restart them after power is
+                going up to BTR_CHARGE_STRIP (200 mv) more than the limit.
+                2. PowerDownSleep - change in IO's when power is low.
+                3. add DeepSleep - when restar is because of battery was insert - go to deep sleep. nothing works.
+                4. if pivot connected and send GPS - so need to connect - only do it if next connection is more than hour.
+VERSION: W.6.17.3
+
